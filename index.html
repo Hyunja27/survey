@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>직원 만족도 평가 설문지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: white;
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .info-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .info-item label {
+            display: block;
+            font-size: 14px;
+            color: #495057;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .info-item select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .info-item select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .section {
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: #2d3436;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            font-weight: 700;
+        }
+        
+        .question-block {
+            margin-bottom: 35px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .question-block:hover {
+            background: #f1f3f5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .question-block.answered {
+            border-left: 4px solid #51cf66;
+        }
+        
+        .question {
+            font-size: 16px;
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+        
+        .scale-item {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .scale-item input[type="radio"] {
+            display: none;
+        }
+        
+        .scale-label {
+            display: block;
+            padding: 12px 8px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            font-size: 13px;
+            color: #495057;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .scale-item input[type="radio"]:checked + .scale-label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .scale-item:hover .scale-label {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .scale-endpoints {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .submit-section {
+            padding: 40px 30px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            position: relative;
+            min-width: 200px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .privacy-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .submit-btn.loading .btn-text {
+            visibility: hidden;
+        }
+        
+        .submit-btn.loading .spinner {
+            display: block;
+        }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .success-modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #51cf66 0%, #12b886 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+        
+        .modal-message {
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .modal-score {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
+        
+        .modal-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .error-message {
+            display: none;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .config-note {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            color: #856404;
+        }
+        
+        .config-note h3 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+        
+        .config-note code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scale-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .scale-item {
+                width: 100%;
+            }
+            
+            .scale-label {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body> 
+    <div class="container">
+        <div class="header">
+            <h1>포르테의원 직원 근무 만족도 평가</h1>
+            <p>귀하의 소중한 의견은 더 나은 근무환경 조성에 큰 도움이 됩니다.<br>
+            솔직하고 편안하게 응답해 주시기 바랍니다.</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 12 문항 완료</div>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <form id="satisfactionForm">
+            <div class="info-section">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label for="position">직무 *</label>
+                        <select id="position" required>
+                            <option value="">선택하세요</option>
+                            <option value="코디네이터">코디네이터</option>
+                            <option value="간호조무사">간호조무사</option>
+                            <option value="상담실장">상담실장</option>
+                        </select>
+                    </div>
+                    <div class="info-item">
+                        <label for="tenure">근무 기간 *</label>
+                        <select id="tenure" required>
+                            <option value="">선택하세요</option>
+                            <option value="3개월 미만">3개월 미만</option>
+                            <option value="3-6개월">3-6개월</option>
+                            <option value="6개월-1년">6개월-1년</option>
+                            <option value="1-3년">1-3년</option>
+                            <option value="3년 이상">3년 이상</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 모든 12개 질문 -->
+            <div class="section">
+                <h2 class="section-title">📊 핵심 만족도 평가</h2>
+                
+                <!-- 1. 전반적 만족도 -->
+                <div class="question-block" data-question="overall_satisfaction">
+                    <div class="question">1. 현재 직장에서 근무하는 것에 전반적으로 얼마나 만족하십니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q1_1" name="overall_satisfaction" value="1">
+                            <label class="scale-label" for="q1_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q1_2" name="overall_satisfaction" value="2">
+                            <label class="scale-label" for="q1_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q1_3" name="overall_satisfaction" value="3">
+                            <label class="scale-label" for="q1_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q1_4" name="overall_satisfaction" value="4">
+                            <label class="scale-label" for="q1_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q1_5" name="overall_satisfaction" value="5">
+                            <label class="scale-label" for="q1_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q1_6" name="overall_satisfaction" value="6">
+                            <label class="scale-label" for="q1_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q1_7" name="overall_satisfaction" value="7">
+                            <label class="scale-label" for="q1_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+                
+                <!-- 2. 업무량 -->
+                <div class="question-block" data-question="workload">
+                    <div class="question">2. 현재 담당하는 업무량이 적절하다고 느끼십니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q2_1" name="workload" value="1">
+                            <label class="scale-label" for="q2_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q2_2" name="workload" value="2">
+                            <label class="scale-label" for="q2_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q2_3" name="workload" value="3">
+                            <label class="scale-label" for="q2_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q2_4" name="workload" value="4">
+                            <label class="scale-label" for="q2_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q2_5" name="workload" value="5">
+                            <label class="scale-label" for="q2_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q2_6" name="workload" value="6">
+                            <label class="scale-label" for="q2_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q2_7" name="workload" value="7">
+                            <label class="scale-label" for="q2_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>매우 부담됨</span>
+                        <span>매우 적절함</span>
+                    </div>
+                </div>
+                
+                <!-- 3. 보상 공정성 -->
+                <div class="question-block" data-question="recognition">
+                    <div class="question">3. 업무 성과에 대한 인정과 보상이 공정하게 이루어진다고 생각하십니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q3_1" name="recognition" value="1">
+                            <label class="scale-label" for="q3_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q3_2" name="recognition" value="2">
+                            <label class="scale-label" for="q3_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q3_3" name="recognition" value="3">
+                            <label class="scale-label" for="q3_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q3_4" name="recognition" value="4">
+                            <label class="scale-label" for="q3_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q3_5" name="recognition" value="5">
+                            <label class="scale-label" for="q3_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q3_6" name="recognition" value="6">
+                            <label class="scale-label" for="q3_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q3_7" name="recognition" value="7">
+                            <label class="scale-label" for="q3_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>매우 불공정</span>
+                        <span>매우 공정</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 업무 환경 영역 -->
+            <div class="section">
+                <h2 class="section-title">🏥 업무 환경</h2>
+                
+                <!-- 4-6번 질문 -->
+                <!-- 4. 팀워크 -->
+                <div class="question-block" data-question="teamwork">
+                    <div class="question">4. 동료들과의 협업이 원활하고 서로 도움을 주고받는 분위기입니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q4_1" name="teamwork" value="1">
+                            <label class="scale-label" for="q4_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q4_2" name="teamwork" value="2">
+                            <label class="scale-label" for="q4_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q4_3" name="teamwork" value="3">
+                            <label class="scale-label" for="q4_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q4_4" name="teamwork" value="4">
+                            <label class="scale-label" for="q4_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q4_5" name="teamwork" value="5">
+                            <label class="scale-label" for="q4_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q4_6" name="teamwork" value="6">
+                            <label class="scale-label" for="q4_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q4_7" name="teamwork" value="7">
+                            <label class="scale-label" for="q4_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>전혀 그렇지 않음</span>
+                        <span>매우 그러함</span>
+                    </div>
+                </div>
+                
+                <!-- 5. 상사의 리더십 -->
+                <div class="question-block" data-question="supervision">
+                    <div class="question">5. 직속 상사가 업무를 명확히 지시하고 필요한 지원을 제공합니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q5_1" name="supervision" value="1">
+                            <label class="scale-label" for="q5_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q5_2" name="supervision" value="2">
+                            <label class="scale-label" for="q5_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q5_3" name="supervision" value="3">
+                            <label class="scale-label" for="q5_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q5_4" name="supervision" value="4">
+                            <label class="scale-label" for="q5_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q5_5" name="supervision" value="5">
+                            <label class="scale-label" for="q5_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q5_6" name="supervision" value="6">
+                            <label class="scale-label" for="q5_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q5_7" name="supervision" value="7">
+                            <label class="scale-label" for="q5_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>전혀 그렇지 않음</span>
+                        <span>매우 그러함</span>
+                    </div>
+                </div>
+                
+                <!-- 6. 업무 환경 -->
+                <div class="question-block" data-question="work_environment">
+                    <div class="question">6. 업무 공간과 필요한 장비/도구가 충분히 제공되고 있습니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q6_1" name="work_environment" value="1">
+                            <label class="scale-label" for="q6_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q6_2" name="work_environment" value="2">
+                            <label class="scale-label" for="q6_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q6_3" name="work_environment" value="3">
+                            <label class="scale-label" for="q6_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q6_4" name="work_environment" value="4">
+                            <label class="scale-label" for="q6_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q6_5" name="work_environment" value="5">
+                            <label class="scale-label" for="q6_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q6_6" name="work_environment" value="6">
+                            <label class="scale-label" for="q6_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q6_7" name="work_environment" value="7">
+                            <label class="scale-label" for="q6_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>매우 부족함</span>
+                        <span>매우 충분함</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 성장과 발전 영역 -->
+            <div class="section">
+                <h2 class="section-title">📈 성장과 발전</h2>
+                
+                <!-- 7. 교육 기회 -->
+                <div class="question-block" data-question="training">
+                    <div class="question">7. 업무 역량 향상을 위한 교육 기회가 충분히 제공됩니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q7_1" name="training" value="1">
+                            <label class="scale-label" for="q7_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q7_2" name="training" value="2">
+                            <label class="scale-label" for="q7_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q7_3" name="training" value="3">
+                            <label class="scale-label" for="q7_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q7_4" name="training" value="4">
+                            <label class="scale-label" for="q7_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q7_5" name="training" value="5">
+                            <label class="scale-label" for="q7_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q7_6" name="training" value="6">
+                            <label class="scale-label" for="q7_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q7_7" name="training" value="7">
+                            <label class="scale-label" for="q7_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>매우 부족함</span>
+                        <span>매우 충분함</span>
+                    </div>
+                </div>
+                
+                <!-- 8. 의사소통 -->
+                <div class="question-block" data-question="communication">
+                    <div class="question">8. 병원의 중요한 정보와 결정사항이 투명하게 공유됩니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q8_1" name="communication" value="1">
+                            <label class="scale-label" for="q8_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q8_2" name="communication" value="2">
+                            <label class="scale-label" for="q8_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q8_3" name="communication" value="3">
+                            <label class="scale-label" for="q8_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q8_4" name="communication" value="4">
+                            <label class="scale-label" for="q8_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q8_5" name="communication" value="5">
+                            <label class="scale-label" for="q8_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q8_6" name="communication" value="6">
+                            <label class="scale-label" for="q8_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q8_7" name="communication" value="7">
+                            <label class="scale-label" for="q8_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>전혀 공유 안 됨</span>
+                        <span>매우 투명함</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 병원 특성 평가 -->
+            <div class="section">
+                <h2 class="section-title">🌟 병원 특성 평가</h2>
+                
+                <!-- 9. 외국인 환자 응대 -->
+                <div class="question-block" data-question="japanese_support">
+                    <div class="question">9. 일본인 환자 응대에 필요한 지원(통역, 매뉴얼 등)이 충분합니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q9_1" name="japanese_support" value="1">
+                            <label class="scale-label" for="q9_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q9_2" name="japanese_support" value="2">
+                            <label class="scale-label" for="q9_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q9_3" name="japanese_support" value="3">
+                            <label class="scale-label" for="q9_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q9_4" name="japanese_support" value="4">
+                            <label class="scale-label" for="q9_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q9_5" name="japanese_support" value="5">
+                            <label class="scale-label" for="q9_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q9_6" name="japanese_support" value="6">
+                            <label class="scale-label" for="q9_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q9_7" name="japanese_support" value="7">
+                            <label class="scale-label" for="q9_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>매우 부족함</span>
+                        <span>매우 충분함</span>
+                    </div>
+                </div>
+                
+                <!-- 10. 워라밸 -->
+                <div class="question-block" data-question="work_life_balance">
+                    <div class="question">10. 일과 개인 생활의 균형을 유지할 수 있습니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q10_1" name="work_life_balance" value="1">
+                            <label class="scale-label" for="q10_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q10_2" name="work_life_balance" value="2">
+                            <label class="scale-label" for="q10_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q10_3" name="work_life_balance" value="3">
+                            <label class="scale-label" for="q10_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q10_4" name="work_life_balance" value="4">
+                            <label class="scale-label" for="q10_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q10_5" name="work_life_balance" value="5">
+                            <label class="scale-label" for="q10_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q10_6" name="work_life_balance" value="6">
+                            <label class="scale-label" for="q10_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q10_7" name="work_life_balance" value="7">
+                            <label class="scale-label" for="q10_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>전혀 유지 못함</span>
+                        <span>매우 잘 유지</span>
+                    </div>
+                </div>
+                
+                <!-- 11. 추천 의향 -->
+                <div class="question-block" data-question="recommendation">
+                    <div class="question">11. 우리 병원을 친구나 지인에게 근무지로 추천하시겠습니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q11_1" name="recommendation" value="1">
+                            <label class="scale-label" for="q11_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q11_2" name="recommendation" value="2">
+                            <label class="scale-label" for="q11_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q11_3" name="recommendation" value="3">
+                            <label class="scale-label" for="q11_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q11_4" name="recommendation" value="4">
+                            <label class="scale-label" for="q11_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q11_5" name="recommendation" value="5">
+                            <label class="scale-label" for="q11_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q11_6" name="recommendation" value="6">
+                            <label class="scale-label" for="q11_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q11_7" name="recommendation" value="7">
+                            <label class="scale-label" for="q11_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>절대 추천 안 함</span>
+                        <span>적극 추천</span>
+                    </div>
+                </div>
+                
+                <!-- 12. 이직 의도 (역문항) -->
+                <div class="question-block" data-question="retention_intention">
+                    <div class="question">12. 향후 1년 내에 계속 근무할 의향이 있으십니까?</div>
+                    <div class="scale-container">
+                        <div class="scale-item">
+                            <input type="radio" id="q12_1" name="retention_intention" value="1">
+                            <label class="scale-label" for="q12_1">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q12_2" name="retention_intention" value="2">
+                            <label class="scale-label" for="q12_2">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q12_3" name="retention_intention" value="3">
+                            <label class="scale-label" for="q12_3">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q12_4" name="retention_intention" value="4">
+                            <label class="scale-label" for="q12_4">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q12_5" name="retention_intention" value="5">
+                            <label class="scale-label" for="q12_5">5</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q12_6" name="retention_intention" value="6">
+                            <label class="scale-label" for="q12_6">6</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" id="q12_7" name="retention_intention" value="7">
+                            <label class="scale-label" for="q12_7">7</label>
+                        </div>
+                    </div>
+                    <div class="scale-endpoints">
+                        <span>전혀 없음</span>
+                        <span>확실히 있음</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-text">제출하기</span>
+                    <div class="spinner"></div>
+                </button>
+                <p class="privacy-note">
+                    ※ 모든 응답은 익명으로 처리되며, 개인을 특정할 수 없습니다.<br>
+                    ※ 수집된 정보는 근무환경 개선 목적으로만 사용됩니다.
+                </p>
+            </div>
+        </form>
+    </div>
+    
+    <!-- 성공 모달 -->
+    <div class="success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <h2 class="modal-title">제출 완료!</h2>
+            <p class="modal-message">귀하의 소중한 의견이<br>성공적으로 접수되었습니다.</p>
+            <div class="modal-score" id="modalScore"></div>
+            <p class="modal-message">평균 만족도 점수</p>
+            <button class="modal-btn" onclick="resetForm()">새 설문 작성</button>
+        </div>
+    </div>
+    
+    <script>
+        // ⚠️ 중요: 아래 URL을 실제 Google Apps Script 웹 앱 URL로 교체하세요
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-7c7QE5JQXJ9oGFGjZOea8_ZXlozJV0RNZBoHM-hTWCDdtAGaV1Ks5exJnxB0pvsf/exec
+';
+        
+        // 질문 목록
+        const questions = [
+            'overall_satisfaction', 'workload', 'recognition', 'teamwork', 
+            'supervision', 'work_environment', 'training', 'communication',
+            'japanese_support', 'work_life_balance', 'recommendation', 'retention_intention'
+        ];
+        
+        // 진행률 업데이트
+        function updateProgress() {
+            let answered = 0;
+            questions.forEach(q => {
+                const radios = document.getElementsByName(q);
+                const block = document.querySelector(`[data-question="${q}"]`);
+                
+                if (Array.from(radios).some(r => r.checked)) {
+                    answered++;
+                    block.classList.add('answered');
+                } else {
+                    block.classList.remove('answered');
+                }
+            });
+            
+            const progress = (answered / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answered} / ${questions.length} 문항 완료`;
+            
+            return answered === questions.length;
+        }
+        
+        // 각 라디오 버튼에 이벤트 리스너 추가
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.ad
